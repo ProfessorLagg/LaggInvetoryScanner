@@ -14,9 +14,25 @@ end
 -- Loading Saved Variables
 LaggInvetory = LaggInvetory or {}
 
-local playerKey = GetRealmName() .. "/" .. UnitName("player")
-LaggInvetory[playerKey] = LaggInvetory[playerKey] or {}
-printDebug("playerKey: " .. playerKey)
+local function getBagSlotKey(bagId, slotId)
+    local realmKey = GetRealmName();
+    local playerKey = UnitName("player");
+    local bagKey = "bag"
+    if bagId < 10 then
+        bagKey = bagKey .. "0" .. bagId
+    else
+        bagKey = bagKey .. bagId
+    end
+
+    local slotKey = "slot";
+    if slotId < 10 then
+        slotKey = slotKey .. "0" .. slotId
+    else
+        slotKey = slotKey .. slotId
+    end
+
+    return realmKey .. "-" .. playerKey .. "-" .. bagKey .. "-" .. slotKey
+end
 -- return a table containing the numeric ids of your BAG slots
 local function getBagSlotIds()
     local result = {};
@@ -53,30 +69,13 @@ local function scanBag(bagId)
     local numFilledSlots = numSlots - numFreeSlots;
     printDebug("scanBag.numFilledSlots: " .. numFilledSlots)
 
-    local bagKey = "bag"
-    if bagId < 10 then
-        bagKey = bagKey .. "0" .. bagId
-    else
-        bagKey = bagKey .. bagId
-    end
-
-    if LaggInvetory[playerKey][bagKey] == nil then
-        LaggInvetory[playerKey][bagKey] = {}
-    end
-
     local i = 1;
     while i < numSlots do
-        local slotKey = "slot";
-        if i < 10 then
-            slotKey = slotKey .. "0" .. i
-        else
-            slotKey = slotKey .. i
-        end
+        local key = getBagSlotKey(bagId, i)
         local itemLink = GetContainerItemLink(bagId, i);
-
-        printDebug("updating [" .. playerKey .. "][" .. bagKey .. "][" .. slotKey .. "] = " .. (itemLink or "nil"))
+        printDebug("updating [" .. key .. "] = " .. (itemLink or "nil"))
         -- nil removed the value from the table so it all works out
-        LaggInvetory[playerKey][bagKey][slotKey] = itemLink;
+        LaggInvetory[key] = itemLink;
         i = i + 1;
     end
 end
