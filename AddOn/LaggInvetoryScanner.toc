@@ -1,0 +1,8 @@
+## Interface: 33500
+## Version: 0.3.0
+## Title: LaggInvetoryScanner
+## Notes: Scans and stores your inventories
+## Author: https://github.com/ProfessorLagg
+## SavedVariables: LaggInvetory
+
+LaggInvetoryScanner.lua
