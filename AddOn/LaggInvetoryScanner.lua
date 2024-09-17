@@ -40,7 +40,7 @@ local function getBagSlotIds()
     local last = NUM_BAG_SLOTS;
     local i = first
     while i <= last do
-        table.insert(i);
+        table.insert(result, i);
         i = i + 1;
     end
     return result;
